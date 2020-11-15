@@ -1,4 +1,4 @@
-function [accuracy, voiceSpaceTrain, voiceSpaceTest, Q, Delta] = eigenVoices(numPrincipalComponents, ATrain, ATest)
+function [accuracy, voiceSpaceTrain, voiceSpaceTest, Q, Delta, NN] = eigenVoices(numPrincipalComponents, ATrain, ATest, subjectTrain)
 ATrain = ATrain';
 ATest = ATest';
 
@@ -16,8 +16,6 @@ covar = ATrain'*ATrain;
 % if you wan to just get the eigenvectors swith largest eigenvalues
 % you can use eigs.
 [Q, Delta] = eigs(covar, numPrincipalComponents);
-Q
-Delta
 
 %{
 % visualize the principal components as images
@@ -34,9 +32,9 @@ end
 
 for i = 1 : numPrincipalComponents
     
-    voices = audioplayer(Q(:, i), 48000/6);
+    voices = audioplayer(Q(:, i), 8000);
     play(voices);
-    pause(0);
+    pause(1);
 end
 % project into face space
 voiceSpaceTrain = Q'*ATrain';
@@ -49,7 +47,13 @@ voiceSpaceTest = Q'*ATest';
 % Eucledian distance from each face in the train set, all in face space
 % Find the nearest image in the train set to each test image
 
-subjectTest = (1:10)';
+subjectTest = (1:18)';
+subjectTrain = [];
+for i = 1 : 18
+    for j = 1 : 7
+        subjectTrain  = [subjectTrain; i]
+    end 
+end
 
 num_sound_test = size(voiceSpaceTest, 2);  
 num_sound_train = size(voiceSpaceTrain, 2); 
@@ -88,8 +92,8 @@ NN = knnsearch(voiceSpaceTrain', voiceSpaceTest');
 
 % let's check to see if the subject corresponding to the second closest
 % photo is the same as the one corresponding to the query image
-%    accuracy = mean(subjectTrain(NN)==subjectTest);
-accuracy = 1;
+   accuracy = mean(subjectTrain(NN) == subjectTest);
+
 end
 
 

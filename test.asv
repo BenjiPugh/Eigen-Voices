@@ -1,6 +1,6 @@
 sethHodge = soundSet();
 downSampled = [];
-for i = 1 : 18*8
+for i = 1 : 
     downSampled = [downSampled decimate(sethHodge(:, i), 6)];
 end
 trainSet = [];
