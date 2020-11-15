@@ -7,6 +7,6 @@ function soundMatrix = soundSet()
     for file = files'
         [data Fs] = audioread(file.name);
         soundMatrix = [soundMatrix reshape(data, 48000, 8)];
-        % Do some stuff
+        
     end
 end

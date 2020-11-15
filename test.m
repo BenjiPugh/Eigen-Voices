@@ -15,6 +15,5 @@ end
 
 
 
-eigenVoices(10, trainSet, testSet);
-
- 
+[accuracy, voiceSpaceTrain, voiceSpaceTest, Q, Delta] = eigenVoices(10, trainSet, testSet);
+Q = Q;
