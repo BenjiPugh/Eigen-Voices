@@ -1,4 +1,4 @@
-function [accuracy, voiceSpaceTrain, voiceSpaceTest, Q, Delta, NN] = eigenVoices(numPrincipalComponents, ATrain, ATest, subjectTrain)
+function [accuracy, voiceSpaceTrain, voiceSpaceTest, Q, NN, ATest] = eigenVoices(ATrain, ATest)
 ATrain = ATrain';
 ATest = ATest';
 
@@ -7,7 +7,7 @@ ATrain = ATrain - mean(ATrain);
 ATest = ATest - mean(ATest);
 
 % get covariance matrix of the training data
-covar = ATrain'*ATrain;
+%covar = ATrain'*ATrain;
 
 % get EVD (so we can do PCA)
 % If you want all of the Eigenvectors / Eigenvalue, you can use eig:
@@ -15,8 +15,10 @@ covar = ATrain'*ATrain;
 
 % if you wan to just get the eigenvectors swith largest eigenvalues
 % you can use eigs.
-[Q, Delta] = eigs(covar, numPrincipalComponents);
+%[Q, Delta] = eigs(covar, numPrincipalComponents);
 
+[~, ~, Q] = svd(ATrain, 'econ');
+Q
 %{
 % visualize the principal components as images
 f = figure;
@@ -29,10 +31,16 @@ for i = 1 : numPrincipalComponents
     axis square
 end
 %}
-
-for i = 1 : numPrincipalComponents
+for i = 1 : 18
     
-    voices = audioplayer(Q(:, i), 8000);
+    voices = audioplayer(ATest(i, :), 48000);
+    play(voices);
+    pause(1);
+end
+pause(1)
+for i = 1 : 10
+    
+    voices = audioplayer(Q(:, i), 48000);
     play(voices);
     pause(1);
 end
